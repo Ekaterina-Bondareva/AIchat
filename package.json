@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/dom-speech-recognition": "^0.0.1",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -17,7 +18,7 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "next": "13.4.9",
-    "next-env": "^1.1.1",
+    "openai": "^3.3.0",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -13,5 +13,14 @@ const queryChatgtp = (messages: ChatCompletionRequestMessage[]) => {
     })
 }
 
+const generateImage = (userPrompt: string) => {
+    return openai.createImage({
+      prompt: userPrompt,
+      n: 1,
+      size: "256x256",
+      response_format: "url"
+    });
+  };
 
-export default queryChatgtp;
+
+export { queryChatgtp, generateImage };

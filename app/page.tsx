@@ -9,6 +9,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [synthesis, setSynthesis] = useState<SpeechSynthesisUtterance | null>(null);
   const [listening, setListening] = useState(false);
+  const [imageUrl, setimageUrl] = useState("")
 
   const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ export default function Home() {
     const tmp = [...allMessages, newMessage]
     setAllMessages(tmp); // new object should be created to cause state refresh and rerender
 
-    const response = await fetch('/api', {
+    const response = await fetch('/api/chatgpt', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,6 +32,27 @@ export default function Home() {
     const data = await response.json();
     if (data.item) {
       setAllMessages([...tmp, { role: 'assistant', content: data.item}])
+    }
+  }
+
+  const generateImage = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (query.length === 0) {
+        return;
+    }
+
+
+    const response = await fetch('/api/dalle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt: query }),
+    });
+    setQuery('')
+    const data = await response.json();
+    if (data.url) {
+      setimageUrl(data.url)
     }
   }
 
@@ -99,6 +121,13 @@ export default function Home() {
 
   return (
     <div className="grid grid-cols-1 min-h-screen p-20 bg-gray-100">
+      {
+        imageUrl.length > 0 ? (
+          <img src={imageUrl} alt="imageUrl" />
+        ) : (
+          <></>
+        )
+      }
         {
           allMessages.map((item, index) => (
             <div 
@@ -163,6 +192,13 @@ export default function Home() {
             className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
           >
             Stop listening
+          </button>
+          <button
+            type='submit'
+            onClick={generateImage}
+            className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
+          >
+           Generate Image
           </button>
         </div>
     </div>

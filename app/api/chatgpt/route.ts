@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import queryChatgtp from "@/app/adapters/chatgpt_adapter";
+import { queryChatgtp } from "@/app/adapters/chatgpt_adapter";
 
 
 export async function POST(req: NextRequest, res: NextResponse) {

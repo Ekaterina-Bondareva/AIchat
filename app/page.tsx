@@ -1,15 +1,15 @@
 "use client";
 import { useState } from "react";
 import { ChatCompletionRequestMessage } from "openai"
+import { ResponseMessageComponent } from "@/app/components/ResponseMessageComponent"
 
 
 export default function Home() {
 
   const [allMessages, setAllMessages] = useState<ChatCompletionRequestMessage[]>([]);
   const [query, setQuery] = useState("");
-  const [synthesis, setSynthesis] = useState<SpeechSynthesisUtterance | null>(null);
   const [listening, setListening] = useState(false);
-  const [imageUrl, setimageUrl] = useState("")
+  const [imageUrl, setimageUrl] = useState("");
 
   const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -18,7 +18,7 @@ export default function Home() {
     }
     const newMessage: ChatCompletionRequestMessage =  { role: 'user', content: query};
     setQuery('')
-    const tmp = [...allMessages, newMessage]
+    const tmp = [...allMessages, newMessage];
     setAllMessages(tmp); // new object should be created to cause state refresh and rerender
 
     const response = await fetch('/api/chatgpt', {
@@ -52,30 +52,13 @@ export default function Home() {
     setQuery('')
     const data = await response.json();
     if (data.url) {
-      setimageUrl(data.url)
+      setimageUrl(data.url);
     }
   }
 
   const clear = () => {
-    setAllMessages([])
+    setAllMessages([]);
   }
-
-  const handleSpeak = (message: ChatCompletionRequestMessage) => {
-    if ('speechSynthesis' in window && message) {
-      const utterance = new SpeechSynthesisUtterance(message.content);
-      window.speechSynthesis.speak(utterance);
-      setSynthesis(utterance);
-    } else {
-      console.log('Speech synthesis not supported');
-    }
-  };
-
-  const handleStop = () => {
-    if (synthesis) {
-      window.speechSynthesis.cancel();
-      setSynthesis(null);
-    }
-  };
 
   const handleStartListening = () => {
     if ('webkitSpeechRecognition' in window) {
@@ -129,15 +112,7 @@ export default function Home() {
         )
       }
         {
-          allMessages.map((item, index) => (
-            <div 
-              key = {index}
-              className={`${item.role === "user" ? "place-self-end" : "place-self-start"}`}
-            >
-              <div className={`p-5 mb-5 rounded-2xl text-black ${item.role === "user"  ? "rounded-tr-none bg-white" : "rounded-tl-none bg-green-200"}`}>
-                {item.content as string}<br/><br/>
-              </div>
-            </div>))
+          allMessages.map((item, index) => (<ResponseMessageComponent role={item.role} content={item.content}/>))
         }
         <div className="flex flex-col p-100">
           <textarea
@@ -162,24 +137,6 @@ export default function Home() {
           </button>
           <button
             type='submit'
-            onClick={(e) => {
-                handleSpeak(allMessages[allMessages.length - 1])
-              }
-            }
-            disabled={allMessages.length < 2}
-            className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
-          >
-            Read last message
-          </button>
-          <button
-            type='submit'
-            onClick={handleStop}
-            className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
-          >
-            Stop speech
-          </button>
-          <button
-            type='submit'
             onClick={handleStartListening}
             disabled={listening}
             className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
@@ -198,7 +155,7 @@ export default function Home() {
             onClick={generateImage}
             className="p-2 m-5 h-10 bg-slate-400 border rounded-lg"
           >
-           Generate Image
+            Generate Image
           </button>
         </div>
     </div>

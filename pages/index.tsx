@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ChatCompletionRequestMessage } from "openai"
-import { ResponseMessageComponent } from "@/app/components/ResponseMessageComponent"
+import { ChatCompletionRequestMessage } from "openai";
+import { ResponseMessageComponent } from "@/app/components/ResponseMessageComponent";
 
 
 export default function Home() {

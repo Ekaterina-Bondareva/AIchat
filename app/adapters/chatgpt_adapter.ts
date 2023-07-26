@@ -4,11 +4,11 @@ interface QuizItem {
     question: string,
     correctAnswer: string,
     options: Array<string>
-}
+};
 
 interface Quiz{
     questions: Array<QuizItem>
-}
+};
 
 
 const openai = new OpenAIApi(
@@ -33,13 +33,13 @@ const generateImage = (userPrompt: string) => {
 };
 
 const generateEnglishTranslation = (message: string) => {
-    const msg: ChatCompletionRequestMessage = {role: 'user', content: `Translate "${message}" into English`}
-    return queryChatgtp([msg])
+    const msg: ChatCompletionRequestMessage = {role: 'user', content: `Translate "${message}" into English`};
+    return queryChatgtp([msg]);
 };
 
 const generateTranscript = (message: string) => {
-    const msg: ChatCompletionRequestMessage = {role: 'user', content: `Generate pronunciation for "${message}"`}
-    return queryChatgtp([msg])
+    const msg: ChatCompletionRequestMessage = {role: 'user', content: `Generate pronunciation for "${message}"`};
+    return queryChatgtp([msg]);
 };
 
 const generateQuiz = (lang1: StaticRange, lang2: string) => {
@@ -49,11 +49,11 @@ const generateQuiz = (lang1: StaticRange, lang2: string) => {
     }
     interface Quiz{
     questions: Array<QuizItem>
-    }`
-    const msg: ChatCompletionRequestMessage = {role: 'user', content: prompt}
-    return queryChatgtp([msg])
+    }`;
+    const msg: ChatCompletionRequestMessage = {role: 'user', content: prompt};
+    return queryChatgtp([msg]);
 };
 
 
 export { queryChatgtp, generateImage, generateEnglishTranslation, generateTranscript, generateQuiz };
-export type { QuizItem, Quiz }
+export type { QuizItem, Quiz };
